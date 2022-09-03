@@ -5,25 +5,29 @@
     <title></title>
 </head>
 <body>
-    <h2>Order A Book</h2>
-    <table>
-        <tr>
-            <th>Book Title</th>
-            <th>Price</th>
-            <th>
-                Action
-            </th>
+    <div id="line-items">
+        <h2>Order A Book</h2>
+        <table>
+            <tr>
+                <th>Book Title</th>
+                <th>Price</th>
+                <th>
+                    Action
+                </th>
 
-            <th></th>
-        </tr>
-        <tbody id="books"></tbody>
+                <th></th>
+            </tr>
+            <tbody id="books"></tbody>
 
-    </table>
+        </table>
+    </div>
+    
 
-    <h2>Your Cart</h2>
+    <h2>Your Order</h2>
     <p id="message">
-        Items You Add To Your Cart will appear here
+        Items You Add To Your Order Will Appear Here
     </p>
+    <div id="cart">
     <table id="cart-heading" style="display:none;">
         <tr>
             <th>Book Title</th>
@@ -36,10 +40,39 @@
         <tbody id="cart-body"></tbody>
 
     </table>
-    <div id="checkout">
+
     </div>
-    <div id="reset">
+    <div>
+        <a href="#" id="checkout" style="display:none;">Checkout</a>
+        <a href="#" id="reset" style="display:none;">Reset</a>
     </div>
+    <div id="order-information" style="display:none">
+        <form id="form">
+            <p>
+                <label for="firstName">First Name:</label>
+                <input id="firstName" type="text" required />
+            </p>
+            <p>
+                <label for="lastName">Last Name:</label>
+                <input id="lastName" type="text" required />
+            </p>
+            <p>
+                <label for="email">Email:</label>
+                <input id="email" type="email" required />
+            </p>
+            <p>
+                <label for="deliveryAddress">Delivery Address:</label>
+                <input id="deliveryAddress" type="text" required />
+            </p>
+            <p>
+                <label for="comments">Comments</label>
+                <textarea id="comments"></textarea>
+            </p>
+            <input type="submit" id="submit" value="Confirm Order" />
+
+        </form>
+    </div>
+
     <script src="js/site.js" asp-append-version="true"></script>
     <script type="text/javascript">
         getItems();
