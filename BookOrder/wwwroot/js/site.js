@@ -9,9 +9,13 @@ function getItems() {
         .then(data => displayItems(data))
         .catch(error => console.error('Unable to get books.', error));
 
-    
+    document.getElementById('form').addEventListener('submit',submit)
 }
 
+function submit(e) {
+    e.preventDefault();
+    alert('form submitted')
+}
 function displayItems(data) {
    
     const tBody = document.getElementById('books');
@@ -42,7 +46,7 @@ function displayItems(data) {
 
 function addToCart(e) {
     e.preventDefault();
-    
+
     //Hide the paragraph
     const p = document.getElementById('message');
     p.setAttribute('style', 'display:none;');
@@ -55,7 +59,7 @@ function addToCart(e) {
     let bookId = Number(e.target.id)
 
     let isBookInOrder = books.some(book => book.id === bookId)
-
+    console.log(isBookInOrder)
     if (isBookInOrder) {
         //book exists in the order so increase the qty
         books.forEach(function (value) {
@@ -65,7 +69,7 @@ function addToCart(e) {
                 //update the UI
                 document.getElementById(`qty-cell-row-${bookId}`).innerText = value.qty;
             }
-        })        
+        })
     }
     else {
         //Add the book to the books array
@@ -122,31 +126,22 @@ function addToCart(e) {
         link3.innerHTML = 'Remove';
         const td6 = tr.insertCell(4);
         td6.appendChild(link3)
-
-         //reset and checkout buttons 
-        if (books.length == 1) {
-            const link4 = document.createElement('a');
-            link4.href = "#";
-            link4.addEventListener('click', checkout);
-            link4.setAttribute('id', bookId);
-            link4.innerText = 'Checkout';
-
-            const link5 = document.createElement('a');
-            link5.href = "#";
-            link5.addEventListener('click', reset);
-            link5.setAttribute('id', bookId);
-            link5.innerText = 'Reset';
-
-         document.getElementById('reset').appendChild(link4)
-            document.getElementById('checkout').appendChild(link5)
-        }
         
+        let resetLink = document.getElementById('reset')
+        resetLink.setAttribute('style', 'display:block;')
+        resetLink.addEventListener('click', reset)
+
+        let checkoutLink = document.getElementById('checkout')
+        checkoutLink.setAttribute('style', 'display:block;')
+        checkoutLink.addEventListener('click', checkout)
     }
 
 } 
+
 function checkout(e) {
     e.preventDefault()
-    alert('An email with your order has been sent')
+    document.getElementById('line-items').setAttribute('style','display:none')
+    document.getElementById('order-information').setAttribute('style','display:block')
 }
 
 function reset(e) {
@@ -231,6 +226,11 @@ function removeItem(e) {
         //Hide table header
         const cartTable = document.getElementById('cart-heading');
         cartTable.setAttribute('style', 'display:none;');
+
+        //Hide the checkout and reset
+        document.getElementById('reset').setAttribute('style','display:none')
+        document.getElementById('checkout').setAttribute('style','display:none')
+        
     }
 
 }
