@@ -46,12 +46,15 @@ function displayItems(data) {
 
 function addToCart(e) {
     e.preventDefault();
+    let bookId = Number(e.target.id)
+    let bookTitles = ["French For Kids", "Programming For teens"];
+    let bookPrices = [25000, 20000];
 
-    //query api to get book information
+    //todo: query api to get book information
     let bookAdded = {
-        id: 2,
-        title:"French For Beginners",
-        price:25000
+        id: bookId,
+        title:bookTitles[0],
+        price: bookPrices[0]
     }
     //Hide the paragraph
     const p = document.getElementById('message');
@@ -61,7 +64,7 @@ function addToCart(e) {
     const cartTable = document.getElementById('cart-heading');
     cartTable.setAttribute('style', 'display:block;');
 
-    let bookId = Number(e.target.id)
+    
 
     //does this book exist in our order?
     let isBookInOrder = books.some(book => book.id === bookId)
@@ -74,6 +77,8 @@ function addToCart(e) {
                 //update the UI
                 document.getElementById(`qty-cell-row-${bookId}`).innerText = value.qty;
                 calculateAmount(bookId)
+                orderTotal = calculateOrderTotal()
+                document.getElementById('order-total').innerText = `Your order total is ${orderTotal}`; 
             }
         })
     }
@@ -81,7 +86,8 @@ function addToCart(e) {
         //Add the book to the books array
         books.push({
             id: bookId,
-            qty: 1
+            qty: 1,
+            price:bookAdded.price
         });
 
         //Add it to the UI
@@ -147,18 +153,35 @@ function addToCart(e) {
         let checkoutLink = document.getElementById('checkout')
         checkoutLink.setAttribute('style', 'display:block;')
         checkoutLink.addEventListener('click', checkout)
+
+        //Show the order total paragraph
+        let orderTotal = calculateOrderTotal();
+        document.getElementById('order-total').innerText = `Your order total is ${orderTotal}`
+        
     }
 
 } 
+
+function calculateOrderTotal() {
+    let orderItems = books.map(book => book.price * book.qty)
+    let sum = 0
+    orderItems.forEach(function(value){  
+      sum = sum + value
+    })
+    return sum;  
+}
 function calculateAmount(bookId) {
 
     let price = Number((document.getElementById(`price-cell-row-${bookId}`)).innerText)
     let qty = document.getElementById(`qty-cell-row-${bookId}`).innerText
+    console.log(price)
+    console.log(qty)
 
     let amount = document.getElementById(`amount-cell-row-${bookId}`)
     amount.innerText = Number(qty) * Number(price)
     
 }
+
 function checkout(e) {
     e.preventDefault()
     document.getElementById('line-items').setAttribute('style','display:none')
@@ -193,6 +216,7 @@ function reset(e) {
     //Hide reset and checkout links
     document.getElementById('reset').setAttribute('style', 'display:none;')
     document.getElementById('checkout').setAttribute('style', 'display:none;')
+    document.getElementById('order-total').innerText = '';
 }
 
 function addQuantity(e) {
@@ -234,7 +258,6 @@ function removeItem(e) {
     books.forEach(function (value) {
         if (value.id == bookId) {
             books = books.filter(book => book.id != value.id)
-            console.log(books)
             //update the UI
             document.getElementById(`row-${bookId}`).remove()
         }
@@ -250,9 +273,10 @@ function removeItem(e) {
         const cartTable = document.getElementById('cart-heading');
         cartTable.setAttribute('style', 'display:none;');
 
-        //Hide the checkout and reset
+        //Hide the checkout , reset and order total
         document.getElementById('reset').setAttribute('style','display:none')
-        document.getElementById('checkout').setAttribute('style','display:none')
+        document.getElementById('checkout').setAttribute('style', 'display:none')
+        document.getElementById('order-total').innerText = ''
         
     }
 
