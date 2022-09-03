@@ -14,7 +14,11 @@ function getItems() {
 
 function submit(e) {
     e.preventDefault();
-    alert('form submitted')
+   //todo: Post to api
+    alert('An email has been sent')
+    document.getElementById('form').reset();
+    location.reload();
+    
 }
 function displayItems(data) {
    
@@ -181,6 +185,7 @@ function calculateAmount(bookId) {
 
 function checkout(e) {
     e.preventDefault()
+    
     document.getElementById('line-items').setAttribute('style','display:none')
     document.getElementById('order-information').setAttribute('style', 'display:block')
     document.getElementById('checkout').setAttribute('style', 'display:none')
@@ -272,6 +277,9 @@ function removeItem(e) {
     })
 
 }
+
+
+
 
 
 
