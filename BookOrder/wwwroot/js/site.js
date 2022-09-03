@@ -78,7 +78,7 @@ function addToCart(e) {
                 document.getElementById(`qty-cell-row-${bookId}`).innerText = value.qty;
                 calculateAmount(bookId)
                 orderTotal = calculateOrderTotal()
-                document.getElementById('order-total').innerText = `Your order total is ${orderTotal}`; 
+                
             }
         })
     }
@@ -156,7 +156,7 @@ function addToCart(e) {
 
         //Show the order total paragraph
         let orderTotal = calculateOrderTotal();
-        document.getElementById('order-total').innerText = `Your order total is ${orderTotal}`
+        
         
     }
 
@@ -168,7 +168,7 @@ function calculateOrderTotal() {
     orderItems.forEach(function(value){  
       sum = sum + value
     })
-    return sum;  
+    document.getElementById('order-total').innerText = `Your order total is ${sum}`;
 }
 function calculateAmount(bookId) {
 
@@ -230,7 +230,7 @@ function addQuantity(e) {
             document.getElementById(`qty-cell-row-${bookId}`).innerText = value.qty;
         }
     })    
-
+    calculateOrderTotal();
 }
 
 function reduceQuantity(e) {
@@ -247,7 +247,7 @@ function reduceQuantity(e) {
             document.getElementById(`qty-cell-row-${bookId}`).innerText = value.qty;
         }
     }) 
-
+    calculateOrderTotal();
 }
 
 function removeItem(e) {
@@ -262,6 +262,7 @@ function removeItem(e) {
             document.getElementById(`row-${bookId}`).remove()
         }
     })
+    calculateOrderTotal();
 
     //we just removed the last item in the order so hide the cart
     if (books.length == 0) {
@@ -279,7 +280,7 @@ function removeItem(e) {
         document.getElementById('order-total').innerText = ''
         
     }
-
+   
 }
 
 
