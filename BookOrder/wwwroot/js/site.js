@@ -174,9 +174,6 @@ function calculateAmount(bookId) {
 
     let price = Number((document.getElementById(`price-cell-row-${bookId}`)).innerText)
     let qty = document.getElementById(`qty-cell-row-${bookId}`).innerText
-    console.log(price)
-    console.log(qty)
-
     let amount = document.getElementById(`amount-cell-row-${bookId}`)
     amount.innerText = Number(qty) * Number(price)
     
@@ -228,8 +225,10 @@ function addQuantity(e) {
 
             value.qty += 1;
             document.getElementById(`qty-cell-row-${bookId}`).innerText = value.qty;
+            calculateAmount(bookId);
         }
-    })    
+    })
+    
     calculateOrderTotal();
 }
 
@@ -245,6 +244,7 @@ function reduceQuantity(e) {
             value.qty -= 1;
             }
             document.getElementById(`qty-cell-row-${bookId}`).innerText = value.qty;
+            calculateAmount(bookId);
         }
     }) 
     calculateOrderTotal();
@@ -252,6 +252,12 @@ function reduceQuantity(e) {
 
 function removeItem(e) {
     e.preventDefault();
+
+    //we reached our last item in the order items so reset
+    if (books.length == 1) {
+        reset(e);
+        return;
+    }
     let bookId = Number(e.target.id)
 
     //remove book from books array
@@ -260,27 +266,11 @@ function removeItem(e) {
             books = books.filter(book => book.id != value.id)
             //update the UI
             document.getElementById(`row-${bookId}`).remove()
+            calculateAmount(bookId)
+            calculateOrderTotal();
         }
     })
-    calculateOrderTotal();
 
-    //we just removed the last item in the order so hide the cart
-    if (books.length == 0) {
-        //Show the paragraph
-        const p = document.getElementById('message');
-        p.setAttribute('style', 'display:block;');
-
-        //Hide table header
-        const cartTable = document.getElementById('cart-heading');
-        cartTable.setAttribute('style', 'display:none;');
-
-        //Hide the checkout , reset and order total
-        document.getElementById('reset').setAttribute('style','display:none')
-        document.getElementById('checkout').setAttribute('style', 'display:none')
-        document.getElementById('order-total').innerText = ''
-        
-    }
-   
 }
 
 
