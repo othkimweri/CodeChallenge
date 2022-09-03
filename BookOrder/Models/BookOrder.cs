@@ -2,7 +2,7 @@
 
 namespace BookOrder.Models
 {
-    public class BookOrder
+    public class Order
     {
         [Required]
         public Guid Id { get; set; }
