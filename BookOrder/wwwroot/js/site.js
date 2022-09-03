@@ -47,6 +47,12 @@ function displayItems(data) {
 function addToCart(e) {
     e.preventDefault();
 
+    //query api to get book information
+    let bookAdded = {
+        id: 2,
+        title:"French For Beginners",
+        price:25000
+    }
     //Hide the paragraph
     const p = document.getElementById('message');
     p.setAttribute('style', 'display:none;');
@@ -55,11 +61,10 @@ function addToCart(e) {
     const cartTable = document.getElementById('cart-heading');
     cartTable.setAttribute('style', 'display:block;');
 
-    //does this book exist in our order?
     let bookId = Number(e.target.id)
 
+    //does this book exist in our order?
     let isBookInOrder = books.some(book => book.id === bookId)
-    console.log(isBookInOrder)
     if (isBookInOrder) {
         //book exists in the order so increase the qty
         books.forEach(function (value) {
@@ -68,6 +73,7 @@ function addToCart(e) {
 
                 //update the UI
                 document.getElementById(`qty-cell-row-${bookId}`).innerText = value.qty;
+                calculateAmount(bookId)
             }
         })
     }
@@ -85,19 +91,26 @@ function addToCart(e) {
 
         //title
         const td1 = tr.insertCell(0);
-        let textNode = document.createTextNode(`${bookId}`);
-        td1.appendChild(textNode)
-
-        //description
+        //let textNode = document.createTextNode(`${bookAdded.title}`);
+        td1.innerText= bookAdded.title
+       
+        //price
         const td2 = tr.insertCell(1);
-        textNode = document.createTextNode('description');
-        td2.appendChild(textNode)
-
+        td2.setAttribute('id', `price-cell-row-${bookId}`)
+        
+        td2.innerText = bookAdded.price
+        
         //quantity
         const td3 = tr.insertCell(2);
         td3.setAttribute('id', `qty-cell-row-${bookId}`)
-        td3.innerText = 1;
+        let qty = 1
+        td3.innerText = qty;
 
+        //Amount
+        const td10 = tr.insertCell(3);
+        td10.setAttribute('id', `amount-cell-row-${bookId}`)
+        td10.innerText = Number(bookAdded.price) * Number(qty);
+        
         //actions
 
         //add
@@ -106,8 +119,8 @@ function addToCart(e) {
         link1.addEventListener('click', addQuantity);
         link1.setAttribute('id', bookId);
         link1.innerHTML = 'Add';
-        const td4 = tr.insertCell(3);
-        td4.appendChild(link1)
+        const td5 = tr.insertCell(4);
+        td5.appendChild(link1)
 
         //subtract
         const link2 = document.createElement('a');
@@ -115,8 +128,8 @@ function addToCart(e) {
         link2.addEventListener('click', reduceQuantity);
         link2.setAttribute('id', bookId);
         link2.innerHTML = 'Subtract';
-        const td5 = tr.insertCell(4);
-        td5.appendChild(link2)
+        const td6 = tr.insertCell(5);
+        td6.appendChild(link2)
 
         //remove
         const link3 = document.createElement('a');
@@ -124,8 +137,8 @@ function addToCart(e) {
         link3.addEventListener('click', removeItem);
         link3.setAttribute('id', bookId);
         link3.innerHTML = 'Remove';
-        const td6 = tr.insertCell(4);
-        td6.appendChild(link3)
+        const td7 = tr.insertCell(6);
+        td7.appendChild(link3)
         
         let resetLink = document.getElementById('reset')
         resetLink.setAttribute('style', 'display:block;')
@@ -137,11 +150,21 @@ function addToCart(e) {
     }
 
 } 
+function calculateAmount(bookId) {
 
+    let price = Number((document.getElementById(`price-cell-row-${bookId}`)).innerText)
+    let qty = document.getElementById(`qty-cell-row-${bookId}`).innerText
+
+    let amount = document.getElementById(`amount-cell-row-${bookId}`)
+    amount.innerText = Number(qty) * Number(price)
+    
+}
 function checkout(e) {
     e.preventDefault()
     document.getElementById('line-items').setAttribute('style','display:none')
-    document.getElementById('order-information').setAttribute('style','display:block')
+    document.getElementById('order-information').setAttribute('style', 'display:block')
+    document.getElementById('checkout').setAttribute('style', 'display:none')
+    document.getElementById('reset').setAttribute('style', 'display:none')
 }
 
 function reset(e) {
