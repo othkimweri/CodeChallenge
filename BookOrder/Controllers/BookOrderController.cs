@@ -42,7 +42,7 @@ public class BookOrderController : ControllerBase
 		return Ok(_bookList);
 	}
 
-    [HttpGet]
+    [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
         //var books = _bookOrderService.GetAllBooks();
