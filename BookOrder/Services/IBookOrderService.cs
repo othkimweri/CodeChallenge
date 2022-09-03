@@ -2,11 +2,10 @@
 
 namespace BookOrder.Services
 {
-    internal interface IBookOrderService
+    public interface IBookOrderService
     {
-        IEnumerable<Book> GetAllBooks();
-        Book Add(Book book);
-        Book GetById(int id);
-        void Remove(Book book);
+        public IEnumerable<Book> GetAllBooks();
+        public Book GetBook(int id);
+        public void Checkout(Order bookOrder);
     }
 }
