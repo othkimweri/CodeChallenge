@@ -1,5 +1,5 @@
-﻿using BookOrder.Models;
-using BookOrder.Services;
+﻿using BookOrder.Data;
+using BookOrder.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BookOrder.Tests.FakeServices
 {
-    public class FakeBookOrderService : IBookOrderService
+    public class FakeBookOrderService : IBookOrderDb
     {
         private readonly List<Book> _bookList;
         public FakeBookOrderService()
@@ -41,7 +41,7 @@ namespace BookOrder.Tests.FakeServices
              return _bookList.Where(b => b.Id == id).FirstOrDefault();
            
         }
-        public void Checkout(Order order)
+        public void Save(Order order)
         {
             //todo: Email order to client
 

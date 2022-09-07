@@ -1,6 +1,14 @@
-using BookOrder.Services;
 using Microsoft.AspNetCore.Mvc;
 using BookOrder.Models;
+using System.Net.Mail;
+using System.Text;
+using BookOrder.Data;
+using BookOrder.Utilities;
+using System.Diagnostics.Metrics;
+using System.Security.Cryptography;
+using System.Xml.Linq;
+using BookOrder.Data_Access;
+using System.Net;
 
 namespace BookOrder.Controllers;
 
@@ -8,57 +16,86 @@ namespace BookOrder.Controllers;
 [Route("api/[controller]")]
 public class BookOrderController : ControllerBase
 {
-    private readonly IBookOrderService _bookOrderService;
-    private readonly List<Book> _bookList;
+    private readonly IBookOrderDb _bookOrderDb;
+    
+    private IConfiguration _config;
 
-    public BookOrderController(IBookOrderService bookOrderService)
-	{
-		_bookOrderService = bookOrderService;
-        _bookList = new List<Book>()
-            {
-                new Book()
-                {
-                       Id = 1, Title = "English Grammar", Price = 25000, Level = "Senior One"
-                },
-                  new Book()
-                {
-                       Id = 5, Title = "English Grammar Teacher's Edition", Price = 20000, Level = "Senior One"
-                },
-                  new Book()
-                {
-                       Id = 2, Title = "Kiswahili", Price = 25000, Level = "Senior Two"
-                },
-                    new Book()
-                {
-                       Id = 3, Title = "Mathematics", Price = 25000, Level = "Teacher Edition"
-                },
-
-            };
+    public BookOrderController(IBookOrderDb bookOrderDb, IConfiguration config)
+    {
+        _config = config;
+        _bookOrderDb = bookOrderDb;
+    
     }
-	[HttpGet]
-	public IActionResult Get()
-	{
-		//var books = _bookOrderService.GetAllBooks();
-		return Ok(_bookList);
-	}
+    [HttpGet]
+    public IActionResult Get()
+    {
+        var books = _bookOrderDb.GetAllBooks();
+        return Ok(books);
+    }
 
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
-        //var books = _bookOrderService.GetAllBooks();
-        var book = _bookList.Where(b => b.Id == id).FirstOrDefault();
+        var books = _bookOrderDb.GetAllBooks();
+        var book = books.Where(b => b.Id == id).FirstOrDefault();
         return Ok(book);
     }
 
     [HttpPost]
-    public IActionResult Checkout([FromBody] Order bookOrder)
+    public async Task<IActionResult> CheckoutAsync([FromBody] Order bookOrder)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        //TODO:Email the order asynchronously
-        string confirmationMessage = "An email with your order has been sent to your email";
-        return Ok(confirmationMessage);
+
+        try
+        {
+            var books = _bookOrderDb.GetAllBooks();
+            
+            //Start building the email
+            StringBuilder sb = new StringBuilder();
+            string firstName = bookOrder.FirstName;
+            string separator = new string('*', 5);
+            sb.AppendLine($"Dear {firstName},");
+            sb.AppendLine("");
+            sb.AppendLine("Your order with the following items has been confirmed");
+            sb.AppendLine("");
+            sb.AppendLine($"Book ***** Price *** Qty *** Amount");
+
+            foreach (OrderItem orderItem in bookOrder.OrderItems)
+            {
+                var book = books.Where(b => b.Id == orderItem.BookId).FirstOrDefault();
+
+                sb.AppendLine($"{book.Title} | {book.Price} | {orderItem.Quantity} |{orderItem.Amount}");
+
+            }
+
+            //save the order to the database
+            _bookOrderDb.Save(bookOrder);
+
+            //send the email
+            string email = bookOrder.Email;
+            string emailSubject = "confirmation";
+            string emailBody = sb.ToString();
+            string confirmationMessage = "An email with your order has been sent to your email";
+
+
+        Email emailService = new Email(_config);
+        await emailService.SendEmail(email, emailSubject, emailBody);
+            return Ok(confirmationMessage);
+        }
+        catch (Exception e)
+        {
+            //todo: Create a more useful message for the end user
+            return BadRequest(e.Message);
+        }
+       
+
     }
+
 }
+
+
+
+

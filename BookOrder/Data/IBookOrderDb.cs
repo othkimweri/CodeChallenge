@@ -1,11 +1,12 @@
 ﻿using BookOrder.Models;
 
-namespace BookOrder.Services
+namespace BookOrder.Data
 {
-    public interface IBookOrderService
+    public interface IBookOrderDb
     {
         public IEnumerable<Book> GetAllBooks();
         public Book GetBook(int id);
-        public void Checkout(Order bookOrder);
+        public void Save(Order bookOrder);
+
     }
 }

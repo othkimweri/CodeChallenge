@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BookOrder.Controllers;
+using BookOrder.Data;
 using BookOrder.Models;
-using BookOrder.Services;
 using BookOrder.Tests.FakeServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace BookOrder.Tests.ControllerTests
 {
@@ -15,12 +16,13 @@ namespace BookOrder.Tests.ControllerTests
     {
 
         private readonly BookOrderController _controller;
-        private readonly IBookOrderService bookOrderService;
-
-        public BookOrderControllerTest()
+        private readonly IBookOrderDb bookOrderService;
+        private readonly IConfiguration _config;
+        public BookOrderControllerTest(IConfiguration config)
         {
             bookOrderService = new FakeBookOrderService();
-            _controller = new BookOrderController(bookOrderService);
+            _config = config;
+            _controller = new BookOrderController(bookOrderService,_config);
         }
 
         [Fact]

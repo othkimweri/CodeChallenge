@@ -1,2 +1,73 @@
-﻿body {
+﻿body,html{
+    margin:0;
+    padding:10px;
+    
+}
+
+input[type='submit'], button, [aria-label] {
+    cursor: pointer;
+}
+
+table {
+    font-family: Arial, sans-serif;
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #f8f8f8;
+    padding: 5px;
+}
+
+td {
+    border: 1px solid;
+    padding: 5px;
+}
+
+a {
+    text-decoration: none;
+    border: 1px solid #cdcdcd;
+    border-radius: 5px;
+    padding: 3px 3px
+}
+
+#line-items{
+    width:50%;
+    float:left;
+   
+}
+
+#cart {
+    width: 50%;
+    float: right;
+   
+}
+
+#checkout, #reset {
+    background-color: #002ead;
+    color: white;
+    padding: 15px 25px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+}
+
+#order-total{
+  
+    padding:1px;
+   
+    
+}
+
+.total{
+    font-weight:bold;
+    font-size:1.2em;
+}
+
+form{
+    width:40%;
+    float:left;
+   padding:10px;
+   border:1px solid red;
+   margin-left:10px;
 }

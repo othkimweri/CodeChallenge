@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Book Order</title>
+    <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
     <div id="line-items">
@@ -10,6 +11,7 @@
         <table>
             <tr>
                 <th>Book Title</th>
+                <th>Level</th>
                 <th>Price</th>
                 <th> Action </th>
                 <th></th>
@@ -24,8 +26,8 @@
     <p id="message">
         Items You Add To Your Order Will Appear Here
     </p>
-    <div id="cart">
-    <table id="cart-heading" style="display:none;">
+    <div id="cart" style="display:none">
+    <table id="cart-table">
         <tr>
             <th>Book Title</th>
             <th>Price</th>
@@ -33,22 +35,21 @@
             <th>Amount</th>
             <th>Total</th>
             <th>Actions</th>
-
             <th></th>
         </tr>
         <tbody id="cart-body"></tbody>
 
     </table>
         <p id="order-total">
-            
+           
         </p>
+    <div id="cart-footer">
+        <a href="" id="checkout" onclick="return checkout()">Checkout</a>
+        <a href="" id="reset" onclick="return clearCart()">Clear</a>
     </div>
-    <div>
-        <a href="#" id="checkout" style="display:none;">Checkout</a>
-        <a href="#" id="reset" style="display:none;">Reset</a>
     </div>
     <div id="order-information" style="display:none">
-        <form id="form">
+        <form id="form" method="post">
             <p>
                 <label for="firstName">First Name:</label>
                 <input id="firstName" type="text" required />
@@ -56,6 +57,10 @@
             <p>
                 <label for="lastName">Last Name:</label>
                 <input id="lastName" type="text" required />
+            </p>
+            <p>
+                <label for="phoneNo">Phone Number:</label>
+                <input id="phoneNo" type="text" required />
             </p>
             <p>
                 <label for="email">Email:</label>
@@ -69,7 +74,7 @@
                 <label for="comments">Comments</label>
                 <textarea id="comments"></textarea>
             </p>
-            <input type="submit" id="submit" value="Confirm Order" />
+            <input type="submit" id="submit" onsubmit="submit()" value="Confirm Order" />
 
         </form>
     </div>
