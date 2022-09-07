@@ -7,7 +7,7 @@ Note: For visual studio users only version 2022 is compatible. Older versions wi
 
 To run the project, open in Visual Studio 2022 and run or open in VS Code and type dotnet run in a terminal
 
-#### Before You Run The Project ###########33 
+#### Before You Run The Project ########### 
 Creating The Database
 Run the scripts in the database scripts folder against an instance of SQL Server in the following order
 	1. Create Database
